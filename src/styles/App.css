@@ -1,0 +1,64 @@
+/* App.css */
+
+/* 전체 화면 가운데 정렬 */
+.app {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Noto Sans', sans-serif;
+}
+
+.character-display {
+    font-size: 10rem;
+    transition: transform 0.3s ease;
+    text-align: center;
+}
+
+.pronunciation {
+    font-size: 2rem;
+    color: gray;
+    text-align: center;
+}
+
+.progress-bar {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: black;
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem; /* 간격 추가 */
+}
+
+.set-name {
+    padding: 0 10px;
+}
+
+.set-name.active {
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.set-name.Hiragana {
+    color: #2D9CDB; /* 히라가나 색 */
+}
+
+.set-name.Katakana {
+    color: #F2994A; /* 가타카나 색 */
+}
+
+/* 활성화된 세트에 대해 색상 강조 */
+.set-name.active.Hiragana {
+    background-color: #B0E0F5; /* 부드러운 파란색 배경 */
+}
+
+.set-name.active.Katakana {
+    background-color: #FFD88D; /* 부드러운 오렌지색 배경 */
+}
