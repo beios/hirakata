@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { hiragana } from './data/hiragana';
-import { katakana } from './data/katakana';
-import { useSwipeable } from 'react-swipeable';
+import React, {useState, useEffect} from 'react';
+import {hiragana} from './data/hiragana';
+import {katakana} from './data/katakana';
+import {useSwipeable} from 'react-swipeable';
 import CharacterDisplay from './components/CharacterDisplay';
 import ProgressBar from './components/ProgressBar';
 import './styles/App.css';
 
 const App = () => {
+    const [startY, setStartY] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [currentSet, setCurrentSet] = useState(generateRandomSet());
     const [currentType, setCurrentType] = useState(null); // Track if current character is Hiragana or Katakana
@@ -42,14 +43,44 @@ const App = () => {
 
     // Initial type setup on the first render
     useEffect(() => {
-        // Set the type of the first character in the shuffled set
-        const firstCharacter = currentSet[0];
-        if (hiragana.includes(firstCharacter)) {
-            setCurrentType('Hiragana');
-        } else {
-            setCurrentType('Katakana');
-        }
-    }, [currentSet]);
+        const handleTouchStart = (event) => {
+            setStartY(event.touches[0].clientY);
+        };
+
+        const handleTouchEnd = (event) => {
+            const endY = event.changedTouches[0].clientY;
+            const diffY = startY - endY;
+
+            if (diffY > 50) {
+                console.log('Swiped Up');
+            } else if (diffY < -50) {
+                console.log('Swiped Down');
+            }
+        };
+
+        const preventScroll = (event) => {
+            event.preventDefault();
+        };
+
+        // 터치 동작 막기
+        document.addEventListener('touchmove', preventScroll, { passive: false });
+
+        // 컴포넌트 언마운트 시 이벤트 제거
+        return () => {
+            document.removeEventListener('touchmove', preventScroll);
+        };
+
+        const container = document.getElementById('app-container');
+        container.addEventListener('touchstart', handleTouchStart);
+        container.addEventListener('touchend', handleTouchEnd);
+        document.addEventListener('touchmove', preventScroll, { passive: false });
+
+        return () => {
+            container.removeEventListener('touchstart', handleTouchStart);
+            container.removeEventListener('touchend', handleTouchEnd);
+            document.removeEventListener('touchmove', preventScroll);
+        };
+    }, [startY]);
 
     const swipeHandlers = useSwipeable({
         onSwipedLeft: () => {
@@ -71,8 +102,8 @@ const App = () => {
     return (
         <div {...swipeHandlers} className="app">
             {/* ProgressBar */}
-            <ProgressBar currentType={currentType} />
-            <CharacterDisplay character={currentCharacter} showPronunciation={showPronunciation} />
+            <ProgressBar currentType={currentType}/>
+            <CharacterDisplay character={currentCharacter} showPronunciation={showPronunciation}/>
         </div>
     );
 };

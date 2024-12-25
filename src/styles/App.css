@@ -1,4 +1,10 @@
 /* App.css */
+body, html {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
 
 /* 전체 화면 가운데 정렬 */
 .app {
@@ -22,43 +28,34 @@
     text-align: center;
 }
 
+/* App.css */
+
+/* 프로그레스 바의 글씨 정렬 */
 .progress-bar {
     position: absolute;
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    color: black;
-    font-size: 1.5rem;
+    color: #2D2D2D; /* 적당히 어울리는 색상 */
+    font-size: 2rem; /* 글씨 크기 */
     font-weight: bold;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem; /* 간격 추가 */
+    text-align: center;
 }
 
 .set-name {
-    padding: 0 10px;
+    display: block;
+    padding: 0; /* 공백 제거 */
 }
 
 .set-name.active {
-    font-weight: bold;
-    padding: 5px;
-    border-radius: 5px;
+    color: #2D9CDB; /* 활성화된 상태의 색상 (히라가나) */
 }
 
-.set-name.Hiragana {
-    color: #2D9CDB; /* 히라가나 색 */
+.set-name.active:not(.Hiragana) {
+    color: #F2994A; /* 활성화된 상태의 색상 (가타카나) */
 }
 
-.set-name.Katakana {
-    color: #F2994A; /* 가타카나 색 */
-}
-
-/* 활성화된 세트에 대해 색상 강조 */
-.set-name.active.Hiragana {
-    background-color: #B0E0F5; /* 부드러운 파란색 배경 */
-}
-
-.set-name.active.Katakana {
-    background-color: #FFD88D; /* 부드러운 오렌지색 배경 */
+#app-container {
+    height: calc(var(--vh, 1vh) * 100); /* 동적 vh 사용 */
+    overflow: hidden;
 }
