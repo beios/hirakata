@@ -37,16 +37,17 @@ const App = () => {
     }
 
     const toggleTypeSelection = (type) => {
-        if (selectedTypes.length === 1 && selectedTypes.includes(type)) {
-            return; // Prevent deselecting the last remaining type
+        if (selectedTypes.includes(type)) {
+            // If both types are selected, allow deselecting the clicked type
+            if (selectedTypes.length > 1) {
+                setSelectedTypes((prevTypes) => prevTypes.filter((t) => t !== type));
+            }
+        } else {
+            // Add the type if it is not already selected
+            setSelectedTypes((prevTypes) => [...prevTypes, type]);
         }
-
-        setSelectedTypes((prevTypes) =>
-            prevTypes.includes(type)
-                ? prevTypes.filter((t) => t !== type) // Remove type if selected
-                : [...prevTypes, type] // Add type if not selected
-        );
     };
+
 
     const swipeHandlers = useSwipeable({
         onSwipedLeft: () => {
