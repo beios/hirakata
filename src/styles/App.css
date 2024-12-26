@@ -59,3 +59,31 @@ body, html {
     height: calc(var(--vh, 1vh) * 100); /* 동적 vh 사용 */
     overflow: hidden;
 }
+
+.type-selection {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.type-button {
+    padding: 10px 20px;
+    font-size: 18px;
+    border: 2px solid #000;
+    border-radius: 5px;
+    background-color: transparent;
+    color: #000;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.type-button.active {
+    background-color: #000;
+    color: #fff;
+}
+
+.type-button:hover {
+    background-color: #555;
+    color: #fff;
+}
