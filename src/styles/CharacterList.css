@@ -1,0 +1,31 @@
+.character-list {
+    padding: 20px;
+}
+
+.character-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.character-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.character-item .character {
+    font-size: 2em;
+    margin-bottom: 5px;
+}
+
+.character-item .pronunciation {
+    font-size: 1.2em;
+    color: #666;
+} 
