@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/hirakata/static/css/main.e94bac97.css",
-    "main.js": "/hirakata/static/js/main.8fb127a4.js",
+    "main.css": "/hirakata/static/css/main.9208ba1c.css",
+    "main.js": "/hirakata/static/js/main.1cf251c1.js",
     "static/js/453.2676108b.chunk.js": "/hirakata/static/js/453.2676108b.chunk.js",
     "index.html": "/hirakata/index.html",
-    "main.e94bac97.css.map": "/hirakata/static/css/main.e94bac97.css.map",
-    "main.8fb127a4.js.map": "/hirakata/static/js/main.8fb127a4.js.map",
+    "main.9208ba1c.css.map": "/hirakata/static/css/main.9208ba1c.css.map",
+    "main.1cf251c1.js.map": "/hirakata/static/js/main.1cf251c1.js.map",
     "453.2676108b.chunk.js.map": "/hirakata/static/js/453.2676108b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e94bac97.css",
-    "static/js/main.8fb127a4.js"
+    "static/css/main.9208ba1c.css",
+    "static/js/main.1cf251c1.js"
   ]
 }
