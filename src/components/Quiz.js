@@ -11,7 +11,7 @@ function Quiz({ characters, onComplete, quizType }) {
 
     useEffect(() => {
         generateOptions();
-    }, [currentIndex]);
+    }, [currentIndex, characters]);
 
     const generateOptions = () => {
         const currentChar = characters[currentIndex];

@@ -13,9 +13,9 @@ function Practice({ characters, currentIndex, onNext, onPrev, onRandomize }) {
     <div className="practice-container">
       <div className="character-display" onClick={() => setShowPronunciation(!showPronunciation)}>
         <div className="japanese-character">{currentCharacter.character}</div>
-        {showPronunciation && (
-          <div className="pronunciation">{currentCharacter.pronunciation}</div>
-        )}
+        <div className={`practice-pronunciation ${showPronunciation ? 'show' : ''}`}>
+          {currentCharacter.pronunciation}
+        </div>
       </div>
       <div className="controls">
         <div className="navigation-buttons">

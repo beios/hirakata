@@ -18,31 +18,35 @@
 
 .character-display:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(52, 152, 219, 0.2);
+  box-shadow: var(--hover-shadow);
 }
 
 .japanese-character {
+  font-size: 48px;
+  margin-bottom: 5px;
   font-family: 'Noto Sans JP', sans-serif;
-  font-size: 180px;
-  font-weight: 700;
   background: var(--gradient-primary);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin: 0;
-  line-height: 1.2;
 }
 
-.pronunciation {
+.practice-pronunciation {
   font-size: 32px;
-  color: var(--text-secondary);
+  color: var(--text-primary);
   margin-top: 20px;
+  font-weight: 500;
   opacity: 0;
   transform: translateY(10px);
   transition: all 0.3s ease;
 }
 
-.show-pronunciation .pronunciation {
+.practice-pronunciation.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.show-pronunciation .practice-pronunciation {
   opacity: 1;
   transform: translateY(0);
 }
@@ -69,7 +73,7 @@
 
 .navigation-buttons button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(52, 152, 219, 0.2);
+  box-shadow: var(--hover-shadow);
 }
 
 .navigation-buttons button:disabled {
@@ -77,6 +81,33 @@
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
+}
+
+.randomize-button {
+  width: 100%;
+  padding: 12px 24px;
+  font-size: 16px;
+  border: none;
+  border-radius: 12px;
+  background: var(--gradient-primary);
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 20px;
+}
+
+.randomize-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--hover-shadow);
+}
+
+.progress-info {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-top: 20px;
+  font-weight: 500;
+  text-align: center;
 }
 
 @media (max-width: 768px) {
@@ -89,10 +120,10 @@
   }
 
   .japanese-character {
-    font-size: 120px;
+    font-size: 36px;
   }
 
-  .pronunciation {
+  .practice-pronunciation {
     font-size: 24px;
   }
 
@@ -101,6 +132,11 @@
   }
 
   .navigation-buttons button {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .randomize-button {
     padding: 10px 20px;
     font-size: 14px;
   }

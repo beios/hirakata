@@ -8,7 +8,7 @@ function List({ characters }) {
         {characters.map((char, index) => (
           <div key={index} className="character-card">
             <div className="japanese-character">{char.character}</div>
-            <div className="pronunciation">{char.pronunciation}</div>
+            <div className="list-pronunciation">{char.pronunciation}</div>
           </div>
         ))}
       </div>

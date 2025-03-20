@@ -96,7 +96,7 @@ function App() {
     };
 
     const handleQuizComplete = () => {
-        setMode('practice');
+        setMode('history');
         setQuizType(null);
     };
 

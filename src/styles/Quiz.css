@@ -15,25 +15,24 @@
 }
 
 .quiz-header:hover {
-    box-shadow: 0 8px 16px rgba(52, 152, 219, 0.2);
+    box-shadow: var(--hover-shadow);
 }
 
 .quiz-character {
+    font-size: 48px;
+    margin-bottom: 10px;
     font-family: 'Noto Sans JP', sans-serif;
-    font-size: 180px;
-    font-weight: 700;
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin: 0;
-    line-height: 1.2;
 }
 
 .quiz-pronunciation {
     font-size: 32px;
-    color: var(--text-secondary);
-    margin-top: 10px;
+    color: var(--text-primary);
+    margin-top: 20px;
+    font-weight: 500;
 }
 
 .quiz-progress {
@@ -64,13 +63,40 @@
 
 .option-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(52, 152, 219, 0.2);
+    box-shadow: var(--hover-shadow);
 }
 
 .option-button.selected {
     background: var(--gradient-primary);
     color: white;
     border: none;
+}
+
+.option-button.correct {
+    background: var(--success-color);
+    color: white;
+    border: none;
+    animation: correctAnswer 0.5s ease;
+}
+
+.option-button.incorrect {
+    background: var(--error-color);
+    color: white;
+    border: none;
+    animation: incorrectAnswer 0.5s ease;
+}
+
+@keyframes correctAnswer {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes incorrectAnswer {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+    100% { transform: translateX(0); }
 }
 
 .quiz-result {
@@ -105,7 +131,7 @@
 
 .restart-button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(52, 152, 219, 0.3);
+    box-shadow: var(--hover-shadow);
 }
 
 .quiz-type-selection {
@@ -144,7 +170,7 @@
 
 .quiz-type-buttons button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(52, 152, 219, 0.2);
+    box-shadow: var(--hover-shadow);
 }
 
 @media (max-width: 768px) {
