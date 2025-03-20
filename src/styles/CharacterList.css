@@ -1,31 +1,69 @@
 .character-list {
     padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.character-list h2 {
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    color: #2D2D2D;
+    font-weight: 600;
 }
 
 .character-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: 20px;
-    padding: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 12px;
+    padding: 10px;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .character-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 8px;
+    border: none;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.character-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .character-item .character {
-    font-size: 2em;
-    margin-bottom: 5px;
+    font-size: 1.8em;
+    margin-bottom: 4px;
+    line-height: 1;
+    color: #2D2D2D;
 }
 
 .character-item .pronunciation {
-    font-size: 1.2em;
+    font-size: 1rem;
     color: #666;
+}
+
+@media (max-width: 768px) {
+    .character-grid {
+        grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+        gap: 8px;
+    }
+
+    .character-item {
+        padding: 6px;
+    }
+
+    .character-item .character {
+        font-size: 1.5em;
+    }
+
+    .character-item .pronunciation {
+        font-size: 0.9rem;
+    }
 } 

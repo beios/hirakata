@@ -1,168 +1,126 @@
 import React, { useState, useEffect } from 'react';
-import { hiragana } from './data/hiragana';
-import { katakana } from './data/katakana';
-import { useSwipeable } from 'react-swipeable';
-import CharacterDisplay from './components/CharacterDisplay';
-import CharacterList from './components/CharacterList';
+import './App.css';
+import Practice from './components/Practice';
+import List from './components/List';
 import Quiz from './components/Quiz';
 import QuizHistory from './components/QuizHistory';
-import './styles/App.css';
+import { hiraganaSet, katakanaSet } from './data/characters';
 
-const App = () => {
+function App() {
+    const [mode, setMode] = useState('practice');
+    const [characters, setCharacters] = useState(hiraganaSet);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [currentSet, setCurrentSet] = useState([]);
-    const [selectedTypes, setSelectedTypes] = useState(['Hiragana', 'Katakana']);
-    const [showPronunciation, setShowPronunciation] = useState(false);
-    const [mode, setMode] = useState('practice'); // 'practice', 'list', 'quiz', 'history'
+    const [showHistory, setShowHistory] = useState(false);
     const [quizType, setQuizType] = useState(null);
 
     useEffect(() => {
-        const updatedSet = generateRandomSet();
-        setCurrentSet(updatedSet);
+        if (mode === 'practice') {
+            setCharacters(hiraganaSet);
+        } else if (mode === 'list') {
+            setCharacters(hiraganaSet);
+        }
         setCurrentIndex(0);
-    }, [selectedTypes]);
+    }, [mode]);
 
-    function generateRandomSet() {
-        let combinedSet = [];
-        if (selectedTypes.includes('Hiragana')) combinedSet = [...combinedSet, ...hiragana];
-        if (selectedTypes.includes('Katakana')) combinedSet = [...combinedSet, ...katakana];
-        return shuffleArray(combinedSet);
-    }
-
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        return array;
-    }
-
-    const toggleTypeSelection = (type) => {
-        if (selectedTypes.includes(type)) {
-            if (selectedTypes.length > 1) {
-                setSelectedTypes((prevTypes) => prevTypes.filter((t) => t !== type));
-            }
-        } else {
-            setSelectedTypes((prevTypes) => [...prevTypes, type]);
-        }
+    const handleModeChange = (newMode) => {
+        setMode(newMode);
+        setShowHistory(false);
+        setQuizType(null);
     };
 
-    const swipeHandlers = useSwipeable({
-        onSwipedLeft: () => {
-            const nextIndex = (currentIndex + 1) % currentSet.length;
-            setCurrentIndex(nextIndex);
-        },
-        onSwipedRight: () => {
-            const prevIndex = (currentIndex - 1 + currentSet.length) % currentSet.length;
-            setCurrentIndex(prevIndex);
-        },
-        onSwipedUp: () => setShowPronunciation(true),
-        onSwipedDown: () => setShowPronunciation(false),
-        preventDefaultTouchmoveEvent: true,
-        trackMouse: true,
-    });
+    const handleNext = () => {
+        setCurrentIndex((prev) => (prev + 1) % characters.length);
+    };
+
+    const handlePrev = () => {
+        setCurrentIndex((prev) => (prev - 1 + characters.length) % characters.length);
+    };
 
     const startQuiz = (type) => {
         setQuizType(type);
         setMode('quiz');
+        setCharacters(type === 'hiragana' ? hiraganaSet : katakanaSet);
     };
 
     const handleQuizComplete = () => {
         setMode('practice');
         setQuizType(null);
+        setCharacters(hiraganaSet);
     };
 
     const renderContent = () => {
+        if (showHistory) {
+            return <QuizHistory onClose={() => setShowHistory(false)} />;
+        }
+
         switch (mode) {
-            case 'list':
+            case 'practice':
                 return (
-                    <div className="list-container">
-                        {selectedTypes.includes('Hiragana') && (
-                            <CharacterList characters={hiragana} type="히라가나" />
-                        )}
-                        {selectedTypes.includes('Katakana') && (
-                            <CharacterList characters={katakana} type="가타카나" />
-                        )}
-                    </div>
+                    <Practice
+                        characters={characters}
+                        currentIndex={currentIndex}
+                        onNext={handleNext}
+                        onPrev={handlePrev}
+                    />
                 );
+            case 'list':
+                return <List characters={characters} />;
             case 'quiz':
-                const quizSet = quizType === 'Hiragana' ? hiragana : katakana;
+                if (!quizType) {
+                    return (
+                        <div className="quiz-type-selection">
+                            <h2>퀴즈 유형 선택</h2>
+                            <div className="quiz-type-buttons">
+                                <button onClick={() => startQuiz('hiragana')}>히라가나 퀴즈</button>
+                                <button onClick={() => startQuiz('katakana')}>가타카나 퀴즈</button>
+                            </div>
+                        </div>
+                    );
+                }
                 return (
                     <Quiz
-                        characters={shuffleArray([...quizSet]).slice(0, 10)}
-                        type={quizType}
+                        characters={[...characters].sort(() => Math.random() - 0.5).slice(0, 10)}
                         onComplete={handleQuizComplete}
                     />
                 );
-            case 'history':
-                return <QuizHistory />;
             default:
-                return (
-                    <div {...swipeHandlers} className="practice-container">
-                        <CharacterDisplay
-                            character={currentSet[currentIndex]}
-                            showPronunciation={showPronunciation}
-                        />
-                    </div>
-                );
+                return null;
         }
     };
 
     return (
         <div className="app">
-            <div className="type-selection">
-                <button
-                    className={`type-button ${selectedTypes.includes('Hiragana') ? 'active' : ''}`}
-                    onClick={() => toggleTypeSelection('Hiragana')}
-                >
-                    히라가나
-                </button>
-                <button
-                    className={`type-button ${selectedTypes.includes('Katakana') ? 'active' : ''}`}
-                    onClick={() => toggleTypeSelection('Katakana')}
-                >
-                    가타카나
-                </button>
-            </div>
-
-            <div className="mode-selection">
-                <button
-                    className={`mode-button ${mode === 'practice' ? 'active' : ''}`}
-                    onClick={() => setMode('practice')}
-                >
-                    연습
-                </button>
-                <button
-                    className={`mode-button ${mode === 'list' ? 'active' : ''}`}
-                    onClick={() => setMode('list')}
-                >
-                    목록
-                </button>
-                <button
-                    className={`mode-button ${mode === 'quiz' ? 'active' : ''}`}
-                    onClick={() => setMode('quiz')}
-                >
-                    퀴즈
-                </button>
-                <button
-                    className={`mode-button ${mode === 'history' ? 'active' : ''}`}
-                    onClick={() => setMode('history')}
-                >
-                    기록
-                </button>
-            </div>
-
-            {mode === 'quiz' && !quizType && (
-                <div className="quiz-type-selection">
-                    <h2>퀴즈 타입 선택</h2>
-                    <button onClick={() => startQuiz('Hiragana')}>히라가나 퀴즈</button>
-                    <button onClick={() => startQuiz('Katakana')}>가타카나 퀴즈</button>
-                </div>
-            )}
-
-            {renderContent()}
+            <header className="app-header">
+                <h1>히라가타</h1>
+                <nav>
+                    <button
+                        className={mode === 'practice' ? 'active' : ''}
+                        onClick={() => handleModeChange('practice')}
+                    >
+                        연습
+                    </button>
+                    <button
+                        className={mode === 'list' ? 'active' : ''}
+                        onClick={() => handleModeChange('list')}
+                    >
+                        목록
+                    </button>
+                    <button
+                        className={mode === 'quiz' ? 'active' : ''}
+                        onClick={() => handleModeChange('quiz')}
+                    >
+                        퀴즈
+                    </button>
+                    {mode === 'practice' && (
+                        <button onClick={() => setShowHistory(true)}>기록</button>
+                    )}
+                </nav>
+            </header>
+            <main className="app-main">
+                {renderContent()}
+            </main>
         </div>
     );
-};
+}
 
 export default App;

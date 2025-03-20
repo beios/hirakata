@@ -1,44 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import './styles/QuizHistory.css';
+import React from 'react';
+import '../styles/QuizHistory.css';
 
-const QuizHistory = () => {
-    const [results, setResults] = useState([]);
+function QuizHistory({ onClose }) {
+    const history = JSON.parse(localStorage.getItem('quizHistory') || '[]');
 
-    useEffect(() => {
-        const quizResults = JSON.parse(localStorage.getItem('quizResults') || '[]');
-        setResults(quizResults);
-    }, []);
-
-    const clearHistory = () => {
-        localStorage.removeItem('quizResults');
-        setResults([]);
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        });
     };
 
     return (
-        <div className="quiz-history">
-            <h2>학습 기록</h2>
-            {results.length === 0 ? (
-                <p>아직 학습 기록이 없습니다.</p>
+        <div className="history-container">
+            <h2>퀴즈 기록</h2>
+            {history.length === 0 ? (
+                <p>아직 퀴즈 기록이 없습니다.</p>
             ) : (
-                <>
-                    <button onClick={clearHistory} className="clear-button">
-                        기록 삭제
-                    </button>
-                    <div className="results-list">
-                        {results.map((result, index) => (
-                            <div key={index} className="result-item">
-                                <div className="result-type">{result.type}</div>
-                                <div className="result-score">점수: {result.score}/10</div>
-                                <div className="result-date">
-                                    {new Date(result.date).toLocaleDateString()}
-                                </div>
+                <div className="history-list">
+                    {history.map((result, index) => (
+                        <div key={index} className="history-item">
+                            <div className="history-date">{formatDate(result.date)}</div>
+                            <div className="history-score">
+                                점수: {result.score}/{result.total} ({result.percentage}%)
                             </div>
-                        ))}
-                    </div>
-                </>
+                        </div>
+                    ))}
+                </div>
             )}
+            <button onClick={onClose} className="close-button">
+                닫기
+            </button>
         </div>
     );
-};
+}
 
 export default QuizHistory; 

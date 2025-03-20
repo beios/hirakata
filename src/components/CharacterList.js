@@ -1,5 +1,5 @@
 import React from 'react';
-import './styles/CharacterList.css';
+import '../styles/CharacterList.css';
 
 const CharacterList = ({ characters, type }) => {
     return (

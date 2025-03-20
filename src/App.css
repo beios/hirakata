@@ -1,0 +1,107 @@
+.app {
+  text-align: center;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.app-header {
+  background-color: #fff;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+.app-header h1 {
+  margin: 0;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+nav button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+nav button:hover {
+  background-color: #e0e0e0;
+}
+
+nav button.active {
+  background-color: #2196f3;
+  color: white;
+}
+
+.app-main {
+  padding: 80px 20px 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.quiz-type-selection {
+  text-align: center;
+  padding: 2rem;
+}
+
+.quiz-type-selection h2 {
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.quiz-type-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.quiz-type-buttons button {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #2196f3;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.quiz-type-buttons button:hover {
+  background-color: #1976d2;
+}
+
+@media (max-width: 600px) {
+  .app-header {
+    padding: 0.5rem;
+  }
+
+  nav {
+    flex-wrap: wrap;
+  }
+
+  nav button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .app-main {
+    padding: 100px 10px 10px;
+  }
+
+  .quiz-type-buttons {
+    flex-direction: column;
+  }
+} 

@@ -1,30 +1,38 @@
 /* App.css */
 body, html {
-    overflow: hidden;
     margin: 0;
     padding: 0;
     height: 100%;
+    overflow-x: hidden;
+    background-color: #f5f5f5;
 }
 
 /* 전체 화면 가운데 정렬 */
 .app {
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    height: 100vh;
+    padding: 20px;
+    background-color: #f5f5f5;
+    overflow-x: hidden;
+    overflow-y: auto;
     font-family: 'Noto Sans', sans-serif;
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .character-display {
     font-size: 10rem;
     transition: transform 0.3s ease;
     text-align: center;
+    color: #2D2D2D;
 }
 
 .pronunciation {
     font-size: 2rem;
-    color: gray;
+    color: #666;
     text-align: center;
 }
 
@@ -36,54 +44,147 @@ body, html {
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    color: #2D2D2D; /* 적당히 어울리는 색상 */
-    font-size: 2rem; /* 글씨 크기 */
+    color: #2D2D2D;
+    font-size: 2rem;
     font-weight: bold;
     text-align: center;
 }
 
 .set-name {
     display: block;
-    padding: 0; /* 공백 제거 */
+    padding: 0;
 }
 
 .set-name.active {
-    color: #2D9CDB; /* 활성화된 상태의 색상 (히라가나) */
+    color: #2D9CDB;
 }
 
 .set-name.active:not(.Hiragana) {
-    color: #F2994A; /* 활성화된 상태의 색상 (가타카나) */
+    color: #F2994A;
 }
 
 #app-container {
-    height: calc(var(--vh, 1vh) * 100); /* 동적 vh 사용 */
+    height: calc(var(--vh, 1vh) * 100);
     overflow: hidden;
 }
 
-.type-selection {
+.type-selection, .mode-selection {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    position: sticky;
+    top: 0;
+    background-color: #f5f5f5;
+    padding: 10px 0;
+    z-index: 100;
+}
+
+.type-button, .mode-button {
+    padding: 10px 20px;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 25px;
+    background-color: #ffffff;
+    color: #2D2D2D;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.type-button:hover, .mode-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.type-button.active, .mode-button.active {
+    background-color: #2D2D2D;
+    color: white;
+}
+
+.practice-container {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin: 20px 0;
+    align-items: center;
+    min-height: 60vh;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-.type-button {
-    padding: 10px 20px;
-    font-size: 18px;
-    border: 2px solid #000;
-    border-radius: 5px;
-    background-color: transparent;
-    color: #000;
+.list-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.quiz-type-selection {
+    text-align: center;
+    padding: 30px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.quiz-type-selection h2 {
+    color: #2D2D2D;
+    font-size: 1.8em;
+    margin-bottom: 30px;
+}
+
+.quiz-type-selection button {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 15px auto;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 25px;
+    background-color: #ffffff;
+    color: #2D2D2D;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.type-button.active {
-    background-color: #000;
-    color: #fff;
+.quiz-type-selection button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: #f5f5f5;
 }
 
-.type-button:hover {
-    background-color: #555;
-    color: #fff;
+@media (max-width: 768px) {
+    .app {
+        padding: 15px;
+    }
+
+    .type-selection, .mode-selection {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .type-button, .mode-button {
+        padding: 8px 16px;
+        font-size: 1em;
+    }
+
+    .quiz-type-selection {
+        padding: 20px;
+    }
+
+    .quiz-type-selection h2 {
+        font-size: 1.5em;
+    }
+
+    .quiz-type-selection button {
+        padding: 12px 24px;
+        font-size: 1.1em;
+    }
+
+    .character-display {
+        font-size: 8rem;
+    }
+
+    .pronunciation {
+        font-size: 1.5rem;
+    }
 }
