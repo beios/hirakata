@@ -19,6 +19,34 @@
   margin: 0;
   color: #333;
   font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.character-type-selection {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.character-type-selection button {
+  padding: 0.4rem 1rem;
+  border: 1px solid #2196f3;
+  border-radius: 4px;
+  background-color: white;
+  color: #2196f3;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.character-type-selection button:hover {
+  background-color: #e3f2fd;
+}
+
+.character-type-selection button.active {
+  background-color: #2196f3;
+  color: white;
 }
 
 nav {
@@ -47,7 +75,7 @@ nav button.active {
 }
 
 .app-main {
-  padding: 80px 20px 20px;
+  padding: 120px 20px 20px;
   max-width: 800px;
   margin: 0 auto;
 }
@@ -88,8 +116,18 @@ nav button.active {
     padding: 0.5rem;
   }
 
+  .character-type-selection {
+    gap: 0.3rem;
+  }
+
+  .character-type-selection button {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
   nav {
     flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
   nav button {
@@ -98,7 +136,7 @@ nav button.active {
   }
 
   .app-main {
-    padding: 100px 10px 10px;
+    padding: 140px 10px 10px;
   }
 
   .quiz-type-buttons {

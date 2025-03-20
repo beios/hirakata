@@ -8,19 +8,28 @@ import { hiraganaSet, katakanaSet } from './data/characters';
 
 function App() {
     const [mode, setMode] = useState('practice');
-    const [characters, setCharacters] = useState(hiraganaSet);
+    const [selectedTypes, setSelectedTypes] = useState(['hiragana', 'katakana']);
+    const [characters, setCharacters] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [showHistory, setShowHistory] = useState(false);
     const [quizType, setQuizType] = useState(null);
 
     useEffect(() => {
+        let combinedCharacters = [];
+        if (selectedTypes.includes('hiragana')) {
+            combinedCharacters = [...combinedCharacters, ...hiraganaSet];
+        }
+        if (selectedTypes.includes('katakana')) {
+            combinedCharacters = [...combinedCharacters, ...katakanaSet];
+        }
+        
         if (mode === 'practice') {
-            setCharacters(hiraganaSet);
-        } else if (mode === 'list') {
-            setCharacters(hiraganaSet);
+            setCharacters([...combinedCharacters].sort(() => Math.random() - 0.5));
+        } else {
+            setCharacters(combinedCharacters);
         }
         setCurrentIndex(0);
-    }, [mode]);
+    }, [mode, selectedTypes]);
 
     const handleModeChange = (newMode) => {
         setMode(newMode);
@@ -36,6 +45,18 @@ function App() {
         setCurrentIndex((prev) => (prev - 1 + characters.length) % characters.length);
     };
 
+    const toggleCharacterType = (type) => {
+        setSelectedTypes(prev => {
+            if (prev.includes(type)) {
+                if (prev.length > 1) {
+                    return prev.filter(t => t !== type);
+                }
+                return prev;
+            }
+            return [...prev, type];
+        });
+    };
+
     const startQuiz = (type) => {
         setQuizType(type);
         setMode('quiz');
@@ -45,7 +66,6 @@ function App() {
     const handleQuizComplete = () => {
         setMode('practice');
         setQuizType(null);
-        setCharacters(hiraganaSet);
     };
 
     const renderContent = () => {
@@ -92,6 +112,20 @@ function App() {
         <div className="app">
             <header className="app-header">
                 <h1>히라가타</h1>
+                <div className="character-type-selection">
+                    <button
+                        className={selectedTypes.includes('hiragana') ? 'active' : ''}
+                        onClick={() => toggleCharacterType('hiragana')}
+                    >
+                        히라가나
+                    </button>
+                    <button
+                        className={selectedTypes.includes('katakana') ? 'active' : ''}
+                        onClick={() => toggleCharacterType('katakana')}
+                    >
+                        가타카나
+                    </button>
+                </div>
                 <nav>
                     <button
                         className={mode === 'practice' ? 'active' : ''}
@@ -111,9 +145,7 @@ function App() {
                     >
                         퀴즈
                     </button>
-                    {mode === 'practice' && (
-                        <button onClick={() => setShowHistory(true)}>기록</button>
-                    )}
+                    <button onClick={() => setShowHistory(true)}>기록</button>
                 </nav>
             </header>
             <main className="app-main">
