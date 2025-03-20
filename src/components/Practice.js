@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import '../styles/Practice.css';
 
-function Practice({ characters, currentIndex, onNext, onPrev }) {
+function Practice({ characters, currentIndex, onNext, onPrev, onRandomize }) {
   const [showPronunciation, setShowPronunciation] = useState(false);
   const currentCharacter = characters[currentIndex];
 
   if (!currentCharacter) {
-    return <div className="practice-container">문자 데이터를 불러오는 중...</div>;
+    return <div className="practice-container">Loading character data...</div>;
   }
 
   return (
@@ -17,9 +17,14 @@ function Practice({ characters, currentIndex, onNext, onPrev }) {
           <div className="pronunciation">{currentCharacter.pronunciation}</div>
         )}
       </div>
-      <div className="navigation-buttons">
-        <button onClick={onPrev}>이전</button>
-        <button onClick={onNext}>다음</button>
+      <div className="controls">
+        <div className="navigation-buttons">
+          <button onClick={onPrev}>Previous</button>
+          <button onClick={onNext}>Next</button>
+        </div>
+        <button className="randomize-button" onClick={onRandomize}>
+          Randomize Order
+        </button>
       </div>
       <div className="progress-info">
         {currentIndex + 1} / {characters.length}

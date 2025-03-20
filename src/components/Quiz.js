@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Quiz.css';
 
-function Quiz({ characters, onComplete }) {
+function Quiz({ characters, onComplete, quizType }) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [score, setScore] = useState(0);
     const [options, setOptions] = useState([]);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [showFeedback, setShowFeedback] = useState(false);
+    const [quizHistory, setQuizHistory] = useState([]);
 
     useEffect(() => {
         generateOptions();
@@ -28,24 +29,37 @@ function Quiz({ characters, onComplete }) {
         setSelectedAnswer(option);
         setShowFeedback(true);
 
-        if (option.pronunciation === characters[currentIndex].pronunciation) {
+        const isCorrect = option.pronunciation === characters[currentIndex].pronunciation;
+        if (isCorrect) {
             setScore(prev => prev + 1);
         }
+
+        setQuizHistory(prev => [...prev, {
+            question: characters[currentIndex].character,
+            selectedAnswer: option.pronunciation,
+            correctAnswer: characters[currentIndex].pronunciation,
+            isCorrect,
+        }]);
 
         setTimeout(() => {
             if (currentIndex < characters.length - 1) {
                 setCurrentIndex(prev => prev + 1);
             } else {
                 const result = {
-                    date: new Date().toISOString(),
+                    timestamp: new Date().toISOString(),
                     score,
-                    total: characters.length,
-                    percentage: Math.round((score / characters.length) * 100)
+                    quizType: quizType.charAt(0).toUpperCase() + quizType.slice(1),
+                    details: [...quizHistory, {
+                        question: characters[currentIndex].character,
+                        selectedAnswer: option.pronunciation,
+                        correctAnswer: characters[currentIndex].pronunciation,
+                        isCorrect,
+                    }]
                 };
 
-                const history = JSON.parse(localStorage.getItem('quizHistory') || '[]');
-                history.push(result);
-                localStorage.setItem('quizHistory', JSON.stringify(history));
+                const history = JSON.parse(localStorage.getItem('quizResults') || '[]');
+                const updatedHistory = [result, ...history].slice(0, 100);
+                localStorage.setItem('quizResults', JSON.stringify(updatedHistory));
 
                 onComplete();
             }
@@ -55,10 +69,10 @@ function Quiz({ characters, onComplete }) {
     return (
         <div className="quiz-container">
             <div className="progress-bar">
-                문제 {currentIndex + 1} / {characters.length}
+                Question {currentIndex + 1} / {characters.length}
             </div>
             <div className="question">
-                <h2>다음 문자의 발음을 선택하세요:</h2>
+                <h2>Select the pronunciation for this character:</h2>
                 <div className="character-display">
                     {characters[currentIndex].character}
                 </div>

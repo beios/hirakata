@@ -1,43 +1,76 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/QuizHistory.css';
 
-function QuizHistory({ onClose }) {
-    const history = JSON.parse(localStorage.getItem('quizHistory') || '[]');
-
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return date.toLocaleString('ko-KR', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false
-        });
+const QuizHistory = () => {
+    const [selectedRecord, setSelectedRecord] = useState(null);
+    
+    const formatDate = (timestamp) => {
+        return new Date(timestamp).toLocaleString('en-US');
     };
+
+    const handleRecordClick = (index) => {
+        setSelectedRecord(selectedRecord === index ? null : index);
+    };
+
+    const handleClearHistory = () => {
+        if (window.confirm('Are you sure you want to delete all quiz records?\nThis action cannot be undone.')) {
+            localStorage.removeItem('quizResults');
+            window.location.reload();
+        }
+    };
+
+    const quizResults = JSON.parse(localStorage.getItem('quizResults') || '[]');
 
     return (
         <div className="history-container">
-            <h2>퀴즈 기록</h2>
-            {history.length === 0 ? (
-                <p>아직 퀴즈 기록이 없습니다.</p>
+            <div className="history-header">
+                <h2>Quiz History</h2>
+                {quizResults.length > 0 && (
+                    <button className="clear-history-button" onClick={handleClearHistory}>
+                        Clear History
+                    </button>
+                )}
+            </div>
+            {quizResults.length === 0 ? (
+                <p className="no-history">No quiz records yet.</p>
             ) : (
-                <div className="history-list">
-                    {history.map((result, index) => (
-                        <div key={index} className="history-item">
-                            <div className="history-date">{formatDate(result.date)}</div>
-                            <div className="history-score">
-                                점수: {result.score}/{result.total} ({result.percentage}%)
+                <ul className="history-list">
+                    {quizResults.map((result, index) => (
+                        <li key={result.timestamp} className="history-item">
+                            <div 
+                                className="history-summary" 
+                                onClick={() => handleRecordClick(index)}
+                            >
+                                <span className="history-date">{formatDate(result.timestamp)}</span>
+                                <span className="history-score">
+                                    Score: {result.score}/10 ({(result.score * 10)}%)
+                                </span>
+                                <span className="history-type">{result.quizType}</span>
                             </div>
-                        </div>
+                            {selectedRecord === index && result.details && (
+                                <div className="history-details">
+                                    {result.details.map((detail, qIndex) => (
+                                        <div 
+                                            key={qIndex} 
+                                            className={`question-result ${detail.isCorrect ? 'correct' : 'incorrect'}`}
+                                        >
+                                            <div className="question-char">{detail.question}</div>
+                                            <div className="answer-info">
+                                                <span>Selected: {detail.selectedAnswer}</span>
+                                                {!detail.isCorrect && (
+                                                    <span className="correct-answer">Correct: {detail.correctAnswer}</span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </li>
                     ))}
-                </div>
+                </ul>
             )}
-            <button onClick={onClose} className="close-button">
-                닫기
-            </button>
         </div>
     );
-}
+};
 
 export default QuizHistory; 

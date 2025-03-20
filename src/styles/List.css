@@ -1,47 +1,56 @@
 .list-container {
-  padding: 20px;
   max-width: 800px;
   margin: 0 auto;
+  padding: 20px;
 }
 
 .character-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
   gap: 20px;
-  padding: 20px;
 }
 
 .character-card {
-  background-color: white;
-  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 20px;
-  text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .character-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(74, 144, 226, 0.2);
 }
 
 .japanese-character {
-  font-size: 2.5em;
-  color: #333;
-  font-family: "Noto Sans JP", sans-serif;
+  font-size: 48px;
   margin-bottom: 10px;
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .pronunciation {
-  font-size: 1.2em;
-  color: #666;
-  font-family: "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-family: 'Noto Sans', sans-serif;
+  font-weight: 500;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+  .list-container {
+    padding: 15px;
+  }
+
   .character-grid {
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 15px;
-    padding: 15px;
   }
 
   .character-card {
@@ -49,10 +58,10 @@
   }
 
   .japanese-character {
-    font-size: 2em;
+    font-size: 36px;
   }
 
   .pronunciation {
-    font-size: 1em;
+    font-size: 12px;
   }
 } 
