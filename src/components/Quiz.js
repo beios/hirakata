@@ -34,12 +34,14 @@ function Quiz({ characters, onComplete, quizType }) {
             setScore(prev => prev + 1);
         }
 
-        setQuizHistory(prev => [...prev, {
+        const currentQuestion = {
             question: characters[currentIndex].character,
             selectedAnswer: option.pronunciation,
             correctAnswer: characters[currentIndex].pronunciation,
             isCorrect,
-        }]);
+        };
+
+        setQuizHistory(prev => [...prev, currentQuestion]);
 
         setTimeout(() => {
             if (currentIndex < characters.length - 1) {
@@ -47,14 +49,9 @@ function Quiz({ characters, onComplete, quizType }) {
             } else {
                 const result = {
                     timestamp: new Date().toISOString(),
-                    score,
+                    score: isCorrect ? score + 1 : score,
                     quizType: quizType.charAt(0).toUpperCase() + quizType.slice(1),
-                    details: [...quizHistory, {
-                        question: characters[currentIndex].character,
-                        selectedAnswer: option.pronunciation,
-                        correctAnswer: characters[currentIndex].pronunciation,
-                        isCorrect,
-                    }]
+                    details: [...quizHistory, currentQuestion]
                 };
 
                 const history = JSON.parse(localStorage.getItem('quizResults') || '[]');
@@ -74,7 +71,7 @@ function Quiz({ characters, onComplete, quizType }) {
             <div className="question">
                 <h2>Select the pronunciation for this character:</h2>
                 <div className="character-display">
-                    {characters[currentIndex].character}
+                    <div className="quiz-character">{characters[currentIndex].character}</div>
                 </div>
             </div>
             <div className="options-grid">
