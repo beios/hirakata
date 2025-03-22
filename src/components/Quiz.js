@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import '../styles/Quiz.css';
 
 function Quiz({ characters, onComplete, quizType }) {
@@ -9,11 +9,7 @@ function Quiz({ characters, onComplete, quizType }) {
     const [showFeedback, setShowFeedback] = useState(false);
     const [quizHistory, setQuizHistory] = useState([]);
 
-    useEffect(() => {
-        generateOptions();
-    }, [currentIndex, characters]);
-
-    const generateOptions = () => {
+    const generateOptions = useCallback(() => {
         const currentChar = characters[currentIndex];
         const otherChars = characters.filter(char => char !== currentChar);
         const shuffledOthers = [...otherChars].sort(() => Math.random() - 0.5).slice(0, 4);
@@ -21,7 +17,11 @@ function Quiz({ characters, onComplete, quizType }) {
         setOptions(allOptions);
         setSelectedAnswer(null);
         setShowFeedback(false);
-    };
+    }, [currentIndex, characters]);
+
+    useEffect(() => {
+        generateOptions();
+    }, [generateOptions]);
 
     const handleAnswerSelect = (option) => {
         if (showFeedback) return;

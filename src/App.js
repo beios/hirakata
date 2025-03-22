@@ -69,7 +69,7 @@ function App() {
             setCharacters(combinedCharacters);
             setCurrentIndex(0);
         }
-    }, [mode, selectedTypes]);
+    }, [mode, selectedTypes, savePracticeState]);
 
     const savePracticeState = async (chars, index) => {
         const state = {
