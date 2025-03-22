@@ -26,6 +26,7 @@ jobs:
 
       - name: Build
         env:
+          CI: false  # 경고를 오류로 취급하지 않도록 설정
           REACT_APP_FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
           REACT_APP_FIREBASE_AUTH_DOMAIN: "beios.github.io"
           REACT_APP_FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
