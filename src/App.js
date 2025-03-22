@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './firebase/config';
+import { syncData, loadSyncedData } from './services/syncService';
 import './App.css';
 import Practice from './components/Practice';
 import List from './components/List';
 import Quiz from './components/Quiz';
 import QuizHistory from './components/QuizHistory';
+import Auth from './components/Auth';
 import { hiraganaSet, katakanaSet } from './data/characters';
 
 function App() {
@@ -12,6 +16,21 @@ function App() {
     const [characters, setCharacters] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [quizType, setQuizType] = useState(null);
+    const [user, setUser] = useState(null);
+    const [isSyncing, setIsSyncing] = useState(false);
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            setUser(user);
+            if (user) {
+                setIsSyncing(true);
+                await loadSyncedData(user.uid);
+                setIsSyncing(false);
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
 
     useEffect(() => {
         let combinedCharacters = [];
@@ -23,17 +42,15 @@ function App() {
         }
         
         if (mode === 'practice') {
-            // Load saved practice state or create new one
             const savedPractice = localStorage.getItem('practiceState');
             if (savedPractice) {
-                const { characters: savedChars, currentIndex: savedIndex, lastUpdated } = JSON.parse(savedPractice);
-                // Check if the saved state matches current character types
+                const { characters: savedChars, currentIndex: savedIndex } = JSON.parse(savedPractice);
                 const savedTypes = savedChars.every(char => 
                     (selectedTypes.includes('hiragana') && hiraganaSet.some(h => h.character === char.character)) ||
                     (selectedTypes.includes('katakana') && katakanaSet.some(k => k.character === char.character))
                 );
                 
-                if (savedTypes) {
+                if (savedTypes && savedChars.length === combinedCharacters.length) {
                     setCharacters(savedChars);
                     setCurrentIndex(savedIndex);
                 } else {
@@ -54,12 +71,17 @@ function App() {
         }
     }, [mode, selectedTypes]);
 
-    const savePracticeState = (chars, index) => {
-        localStorage.setItem('practiceState', JSON.stringify({
+    const savePracticeState = async (chars, index) => {
+        const state = {
             characters: chars,
             currentIndex: index,
             lastUpdated: new Date().toISOString()
-        }));
+        };
+        localStorage.setItem('practiceState', JSON.stringify(state));
+        
+        if (user) {
+            await syncData(user.uid);
+        }
     };
 
     const handleModeChange = (newMode) => {
@@ -156,7 +178,10 @@ function App() {
     return (
         <div className="app">
             <header className="app-header">
-                <h1>Hirakata</h1>
+                <div className="header-top">
+                    <h1>Hirakata</h1>
+                    <Auth user={user} />
+                </div>
                 <div className="character-type-selection">
                     <button
                         className={selectedTypes.includes('hiragana') ? 'active' : ''}
@@ -199,7 +224,11 @@ function App() {
                 </nav>
             </header>
             <main className="app-main">
-                {renderContent()}
+                {isSyncing ? (
+                    <div className="sync-indicator">데이터 동기화 중...</div>
+                ) : (
+                    renderContent()
+                )}
             </main>
         </div>
     );

@@ -1,0 +1,47 @@
+.auth-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.user-name {
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.auth-button {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.auth-button.login {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.auth-button.logout {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.auth-button:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--hover-shadow);
+} 

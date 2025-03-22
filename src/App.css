@@ -222,4 +222,21 @@ html {
   .quiz-type-buttons {
     flex-direction: column;
   }
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.sync-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  color: var(--text-secondary);
+  font-size: 16px;
 } 
