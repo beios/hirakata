@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './firebase/config';
 import { syncData, loadSyncedData } from './services/syncService';
@@ -18,6 +18,19 @@ function App() {
     const [quizType, setQuizType] = useState(null);
     const [user, setUser] = useState(null);
     const [isSyncing, setIsSyncing] = useState(false);
+
+    const savePracticeState = useCallback(async (chars, index) => {
+        const state = {
+            characters: chars,
+            currentIndex: index,
+            lastUpdated: new Date().toISOString()
+        };
+        localStorage.setItem('practiceState', JSON.stringify(state));
+        
+        if (user) {
+            await syncData(user.uid);
+        }
+    }, [user]);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -70,19 +83,6 @@ function App() {
             setCurrentIndex(0);
         }
     }, [mode, selectedTypes, savePracticeState]);
-
-    const savePracticeState = async (chars, index) => {
-        const state = {
-            characters: chars,
-            currentIndex: index,
-            lastUpdated: new Date().toISOString()
-        };
-        localStorage.setItem('practiceState', JSON.stringify(state));
-        
-        if (user) {
-            await syncData(user.uid);
-        }
-    };
 
     const handleModeChange = (newMode) => {
         setMode(newMode);
