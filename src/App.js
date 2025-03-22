@@ -26,9 +26,22 @@ function App() {
             // Load saved practice state or create new one
             const savedPractice = localStorage.getItem('practiceState');
             if (savedPractice) {
-                const { characters: savedChars, currentIndex: savedIndex } = JSON.parse(savedPractice);
-                setCharacters(savedChars);
-                setCurrentIndex(savedIndex);
+                const { characters: savedChars, currentIndex: savedIndex, lastUpdated } = JSON.parse(savedPractice);
+                // Check if the saved state matches current character types
+                const savedTypes = savedChars.every(char => 
+                    (selectedTypes.includes('hiragana') && hiraganaSet.some(h => h.character === char.character)) ||
+                    (selectedTypes.includes('katakana') && katakanaSet.some(k => k.character === char.character))
+                );
+                
+                if (savedTypes) {
+                    setCharacters(savedChars);
+                    setCurrentIndex(savedIndex);
+                } else {
+                    const randomizedChars = [...combinedCharacters].sort(() => Math.random() - 0.5);
+                    setCharacters(randomizedChars);
+                    setCurrentIndex(0);
+                    savePracticeState(randomizedChars, 0);
+                }
             } else {
                 const randomizedChars = [...combinedCharacters].sort(() => Math.random() - 0.5);
                 setCharacters(randomizedChars);
