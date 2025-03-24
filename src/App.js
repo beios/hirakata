@@ -39,6 +39,13 @@ function App() {
                 setIsSyncing(true);
                 await loadSyncedData(user.uid);
                 setIsSyncing(false);
+
+                // 5분마다 자동 동기화
+                const syncInterval = setInterval(async () => {
+                    await syncData(user.uid);
+                }, 5 * 60 * 1000);
+
+                return () => clearInterval(syncInterval);
             }
         });
 

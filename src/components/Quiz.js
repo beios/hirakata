@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import '../styles/Quiz.css';
+import { auth } from '../firebase/config';
+import { syncData } from '../services/syncService';
 
 function Quiz({ characters, onComplete, quizType }) {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -23,7 +25,7 @@ function Quiz({ characters, onComplete, quizType }) {
         generateOptions();
     }, [generateOptions]);
 
-    const handleAnswerSelect = (option) => {
+    const handleAnswerSelect = async (option) => {
         if (showFeedback) return;
         
         setSelectedAnswer(option);
@@ -43,7 +45,7 @@ function Quiz({ characters, onComplete, quizType }) {
 
         setQuizHistory(prev => [...prev, currentQuestion]);
 
-        setTimeout(() => {
+        setTimeout(async () => {
             if (currentIndex < characters.length - 1) {
                 setCurrentIndex(prev => prev + 1);
             } else {
@@ -57,6 +59,11 @@ function Quiz({ characters, onComplete, quizType }) {
                 const history = JSON.parse(localStorage.getItem('quizResults') || '[]');
                 const updatedHistory = [result, ...history].slice(0, 100);
                 localStorage.setItem('quizResults', JSON.stringify(updatedHistory));
+
+                // 퀴즈 완료 시 즉시 동기화
+                if (auth.currentUser) {
+                    await syncData(auth.currentUser.uid);
+                }
 
                 onComplete();
             }
