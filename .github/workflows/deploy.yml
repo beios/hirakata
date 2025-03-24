@@ -26,9 +26,14 @@ jobs:
 
       - name: Update Firebase Config
         run: |
+          echo "Updating Firebase config..."
+          echo "API Key length: ${#FIREBASE_API_KEY}"
+          echo "Messaging Sender ID length: ${#FIREBASE_MESSAGING_SENDER_ID}"
+          echo "App ID length: ${#FIREBASE_APP_ID}"
           sed -i "s/your-api-key/${{ secrets.FIREBASE_API_KEY }}/g" src/firebase/config.js
           sed -i "s/your-sender-id/${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}/g" src/firebase/config.js
           sed -i "s/your-app-id/${{ secrets.FIREBASE_APP_ID }}/g" src/firebase/config.js
+          echo "Firebase config updated"
 
       - name: Build
         env:
