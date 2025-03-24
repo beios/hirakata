@@ -11,8 +11,14 @@ import Auth from './components/Auth';
 import { hiraganaSet, katakanaSet } from './data/characters';
 
 function App() {
-    const [mode, setMode] = useState('practice');
-    const [selectedTypes, setSelectedTypes] = useState(['hiragana', 'katakana']);
+    const [mode, setMode] = useState(() => {
+        const savedMode = localStorage.getItem('currentMode');
+        return savedMode || 'practice';
+    });
+    const [selectedTypes, setSelectedTypes] = useState(() => {
+        const savedTypes = localStorage.getItem('selectedTypes');
+        return savedTypes ? JSON.parse(savedTypes) : ['hiragana', 'katakana'];
+    });
     const [characters, setCharacters] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [quizType, setQuizType] = useState(null);
@@ -93,6 +99,7 @@ function App() {
 
     const handleModeChange = (newMode) => {
         setMode(newMode);
+        localStorage.setItem('currentMode', newMode);
         setQuizType(null);
     };
 
@@ -121,13 +128,11 @@ function App() {
 
     const toggleCharacterType = (type) => {
         setSelectedTypes(prev => {
-            if (prev.includes(type)) {
-                if (prev.length > 1) {
-                    return prev.filter(t => t !== type);
-                }
-                return prev;
-            }
-            return [...prev, type];
+            const newTypes = prev.includes(type)
+                ? (prev.length > 1 ? prev.filter(t => t !== type) : prev)
+                : [...prev, type];
+            localStorage.setItem('selectedTypes', JSON.stringify(newTypes));
+            return newTypes;
         });
     };
 
